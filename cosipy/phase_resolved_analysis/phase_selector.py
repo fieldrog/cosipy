@@ -10,15 +10,15 @@ class PhaseSelector:
     Selects events based on a list of pulsar phase intervals. 
     Optimized for FITS processing via NumPy vectorization.
     """
-    def __init__(self, ephemeris, intervals=None):
+    def __init__(self, ephemeris=None, intervals=None):
         """
         Args:
-            ephemeris (PhaseEphemeris): The ephemeris protocol object. 
+            ephemeris (PhaseEphemeris, optional): The ephemeris protocol object. 
                 (Can also be a list of intervals if used in legacy mode).
             intervals (list of tuples, optional): List of (pstart, pstop) ranges.
                 Example: [(0.1, 0.2), (0.8, 0.9)]
         """
-        # Allow calling PhaseSelector(intervals) for backwards compatibility
+        # Legacy support: if only one argument is provided, assume it's the intervals
         if intervals is None:
             intervals = ephemeris
             ephemeris = None

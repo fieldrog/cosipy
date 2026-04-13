@@ -136,4 +136,6 @@ dmypy.json
 
 # IDEs
 # PyCharm / IntelliJ
-/.idea
+/.idea*.fits
+*.fits.gz
+*.ori

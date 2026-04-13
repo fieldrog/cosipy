@@ -154,7 +154,11 @@ class Ephemeris:
             for line in f:
                 parts = line.split()
                 if not parts or parts[0].upper() != 'F0': continue
-                f0_val = float(parts[1])
+                
+                # Normalize Fortran 'D/d' to standard Python 'E' before floating
+                raw = parts[1].strip()
+                raw = raw.replace('D', 'E').replace('d', 'E')
+                f0_val = float(raw)
                 break
         
         if f0_val is None:

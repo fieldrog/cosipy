@@ -198,7 +198,7 @@ class BinnedData(UnBinnedData):
             logger.info(f"{each.label} unit: {each.unit}")
 
         # Get time binning information:
-        self.time_hist = self.binned_data.project('Time').todense(copy=False).contents
+        self.time_hist = self.binned_data.project('Time').to_dense(copy=False).contents
 
         self.num_time_bins = self.binned_data.axes['Time'].nbins
         self.time_bin_centers = self.binned_data.axes['Time'].centers

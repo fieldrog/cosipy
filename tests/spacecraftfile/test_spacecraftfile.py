@@ -435,7 +435,7 @@ def test_update_ephemeris_scaling():
     """Test that SpacecraftHistory natively scales its exposure array in-place."""
     
     # Load the standard 10-second test file
-    ori_path = test_data.path / "20280301_first_10sec.fits"
+    ori_path = test_data.path / "20280301_first_10sec.ori"
     ori = SpacecraftHistory.open(ori_path)
     
     # Extract the original livetime array (should be ~1.0s per bin)

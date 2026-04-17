@@ -51,7 +51,7 @@ class PhaseEphemeris(Protocol):
         """
         ...
 
-class Ephemeris:
+class PulsarTimingModel:
     """
     A simple pulsar ephemeris model assuming a constant spin frequency (F0).
     
@@ -65,6 +65,9 @@ class Ephemeris:
         The constant spin frequency of the pulsar in Hz.
     t0 : astropy.time.Time
         The reference epoch (time zero) for the phase calculation.
+        
+    TODO : consider barycentric correction
+    
     """
     
     def __init__(self, f0: u.Quantity, t0: Time):
@@ -97,6 +100,19 @@ class Ephemeris:
         """
         dt = (time - self.t0).to(u.s)
         return (self.f0 * dt).value % 1.0
+    
+    @staticmethod
+    def validate_intervals(intervals):
+        """Validates that phase intervals are mathematically sound."""
+        valid_intervals = []
+        for start, stop in intervals:
+            if not (0.0 <= start < stop <= 1.0):
+                raise ValueError(
+                    f"Invalid phase interval: ({start}, {stop}). "
+                    "Must satisfy 0.0 <= start < stop <= 1.0"
+                )
+            valid_intervals.append((start, stop))
+        return valid_intervals        
         
     def get_duty_cycle(self, time_start: Time, time_stop: Time, 
                        intervals: List[Tuple[float, float]]) -> u.Quantity:
@@ -121,6 +137,7 @@ class Ephemeris:
         astropy.units.Quantity
             The effective live time within the phase intervals.
         """
+        valid_intervals = self.validate_intervals(intervals)
         duration = (time_stop - time_start).to(u.s)
         total_width = sum([stop - start for start, stop in intervals])
         return duration * total_width

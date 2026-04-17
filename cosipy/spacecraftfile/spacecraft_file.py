@@ -1410,34 +1410,28 @@ class SpacecraftHistory:
         colat = np.arccos(v[:,2])
         return (lon, colat)
     
-    def update_ephemeris(self, ephemeris, intervals: list):
+    def update_ephemeris(self, ephemeris, intervals):
         """
-        Updates the live time of each pointing bin based on a phase cut.
-        Delegates the duty cycle calculation to the provided ephemeris protocol.
-        
+        Adjust the mission livetime histogram in-place based on a pulsar 
+        phase selection.
+
         Parameters
         ----------
         ephemeris : PhaseEphemeris
-            An object adhering to the PhaseEphemeris protocol.
-        intervals : list of tuples
+            An object adhering to the PhaseEphemeris Protocol.
+        intervals : list of tuple of float
             A list of (start_phase, stop_phase) intervals.
         """
-        import astropy.units as u
-        import numpy as np
-        
-        # 1. Ask the ephemeris to calculate the exposed time for EVERY bin array
         exposed_durations = ephemeris.get_duty_cycle(
             self.intervals_tstart, 
             self.intervals_tstop, 
             intervals
         )
         
-        # 2. Calculate the fraction of the phase cut for each bin
         bin_durations = (self.intervals_tstop - self.intervals_tstart).to(u.s)
         
         fraction = np.zeros_like(bin_durations.value)
         valid_bins = bin_durations > 0
         fraction[valid_bins] = (exposed_durations[valid_bins] / bin_durations[valid_bins]).decompose().value
         
-        # 3. Apply the fraction to the actual measured livetime
         self._livetime_hist.contents[:] = self._livetime_hist.contents * fraction

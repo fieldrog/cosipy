@@ -9,22 +9,11 @@ class PhaseSelector:
     """
     Selects events based on a list of pulsar phase intervals. 
     Optimized for FITS processing via NumPy vectorization.
-    """
-    def __init__(self, ephemeris=None, intervals=None):
-        """
-        Args:
-            ephemeris (PhaseEphemeris, optional): The ephemeris protocol object. 
-                (Can also be a list of intervals if used in legacy mode).
-            intervals (list of tuples, optional): List of (pstart, pstop) ranges.
-                Example: [(0.1, 0.2), (0.8, 0.9)]
-        """
-        # Legacy support: if only one argument is provided, assume it's the intervals
-        if intervals is None:
-            intervals = ephemeris
-            ephemeris = None
-
+    """        
+    def __init__(self, intervals, ephemeris=None):
         self.ephemeris = ephemeris
-        self.intervals = self._validate_intervals(intervals)
+        from .ephemeris import PulsarTimingModel
+        self.intervals = PulsarTimingModel.validate_intervals(intervals)
 
     def _validate_intervals(self, intervals):
         """Ensures all phase values are strictly within [0, 1] and start < stop."""
@@ -87,51 +76,3 @@ class PhaseSelector:
             logger.info("Successfully saved.")
         except Exception as e:
             logger.error(f"Failed to save FITS file: {e}")
-
-def apply_phase_exposure_correction(sc_history, ephemeris, intervals: list):
-    """
-    Adjust the exposure of a SpacecraftHistory object based on phase selection.
-    
-    This utility modifies the livetime histogram of a standard COSI 
-    SpacecraftHistory object in-place. It delegates the duty cycle 
-    calculation to the provided PhaseEphemeris protocol, ensuring correct 
-    normalization for downstream spectral fitting without requiring changes 
-    to the core COSI framework.
-
-    Parameters
-    ----------
-    sc_history : cosipy.spacecraftfile.SpacecraftHistory
-        The unmodified spacecraft history object loaded from an orientation file.
-    ephemeris : PhaseEphemeris
-        An object adhering to the PhaseEphemeris Protocol (e.g., Ephemeris) 
-        used to calculate the duty cycle.
-    intervals : list of tuple of float
-        A list of (start_phase, stop_phase) intervals corresponding to the 
-        selection applied to the event data.
-
-    Returns
-    -------
-    cosipy.spacecraftfile.SpacecraftHistory
-        The identical spacecraft history object with its internal livetime 
-        histogram correctly scaled.
-    """
-    
-    # 1. Ask the ephemeris to calculate the exposed time for every bin
-    exposed_durations = ephemeris.get_duty_cycle(
-        sc_history.intervals_tstart, 
-        sc_history.intervals_tstop, 
-        intervals
-    )
-    
-    # 2. Calculate the fraction of the phase cut for each bin
-    bin_durations = (sc_history.intervals_tstop - sc_history.intervals_tstart).to(u.s)
-    
-    # Initialize fractions to zero, and safely divide to prevent zero-division errors
-    fraction = np.zeros_like(bin_durations.value)
-    valid_bins = bin_durations > 0
-    fraction[valid_bins] = (exposed_durations[valid_bins] / bin_durations[valid_bins]).decompose().value
-    
-    # 3. Apply the fraction directly to the underlying histpy contents array
-    sc_history._livetime_hist.contents[:] = sc_history._livetime_hist.contents * fraction
-    
-    return sc_history

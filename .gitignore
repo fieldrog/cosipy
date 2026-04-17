@@ -139,3 +139,6 @@ dmypy.json
 /.idea*.fits
 *.fits.gz
 *.ori
+*.fits
+*.ori
+*.fits.gz

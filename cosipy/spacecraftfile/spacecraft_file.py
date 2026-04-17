@@ -1412,8 +1412,7 @@ class SpacecraftHistory:
     
     def update_ephemeris(self, ephemeris, intervals):
         """
-        Adjust the mission livetime histogram in-place based on a pulsar 
-        phase selection.
+        Adjust the mission livetime in-place based on a pulsar phase selection.
 
         Parameters
         ----------
@@ -1434,4 +1433,9 @@ class SpacecraftHistory:
         valid_bins = bin_durations > 0
         fraction[valid_bins] = (exposed_durations[valid_bins] / bin_durations[valid_bins]).decompose().value
         
-        self._livetime_hist.contents[:] = self._livetime_hist.contents * fraction
+        if hasattr(self, '_livetime_hist') and self._livetime_hist is not None:
+            # Legacy handling if a histpy object was manually injected
+            self._livetime_hist.contents[:] = self._livetime_hist.contents * fraction
+        else:
+            # Standard cosipy SpacecraftHistory storage natively uses _livetime
+            self._livetime = self.livetime * fraction

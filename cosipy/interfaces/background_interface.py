@@ -1,6 +1,6 @@
 from typing import Protocol, runtime_checkable, Dict
 
-import astropy.units as u
+from astropy.units import Quantity
 
 from .expectation_interface import (
     BinnedExpectationInterface,
@@ -16,9 +16,9 @@ __all__ = [
 
 @runtime_checkable
 class BackgroundInterface(ExpectationInterface, Protocol):
-    def set_parameters(self, **parameters:u.Quantity) -> None:...
+    def set_parameters(self, **parameters:Quantity) -> None:...
     @property
-    def parameters(self) -> Dict[str, u.Quantity]:...
+    def parameters(self) -> Dict[str, Quantity]:...
 
 @runtime_checkable
 class BinnedBackgroundInterface(BackgroundInterface,

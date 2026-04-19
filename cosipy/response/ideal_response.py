@@ -16,7 +16,12 @@ from scoords import SpacecraftFrame
 from cosipy.util.iterables import itertools_batched
 
 from cosipy.data_io.EmCDSUnbinnedData import EmCDSEventInSCFrame
-from cosipy.polarization import StereographicConvention, PolarizationConvention, PolarizationAngle
+from cosipy.polarization import (
+    StereographicConvention,
+    PolarizationConvention,
+    PolarizationAngle
+)
+
 from cosipy.response.relative_coordinates import RelativeCDSCoordinates
 
 from cosipy.interfaces import ExpectationDensityInterface
@@ -479,7 +484,7 @@ class MeasuredEnergyDist(rv_continuous):
         if full_absorp_prob < 0 or full_absorp_prob > 1:
             raise ValueError(f"full_absorp_prob must be between [0,1]. Got {full_absorp_prob}")
 
-        eps = (energy / u.Quantity(510.99895069, u.keV)).value
+        eps = (energy / Quantity(510.99895069, u.keV)).value
 
         phi = _to_rad(phi)
         energy_deposited = energy * (1 - 1 / (1 + eps * (1 - np.cos(phi))))

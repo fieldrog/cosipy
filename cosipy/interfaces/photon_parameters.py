@@ -1,11 +1,16 @@
 import itertools
 from typing import Protocol, runtime_checkable, TypeVar, Iterable, Iterator, Union
 
+from astropy.units import Quantity
 from astropy import units as u
 from astropy.coordinates import SkyCoord
 from scoords import SpacecraftFrame
 
-from cosipy.polarization import PolarizationConvention, PolarizationAngle, StereographicConvention
+from cosipy.polarization import (
+    PolarizationConvention,
+    PolarizationAngle,
+    StereographicConvention
+)
 
 T = TypeVar('T')
 
@@ -138,11 +143,11 @@ class PhotonWithEnergyInterface(PhotonInterface, Protocol):
     def energy_keV(self) -> float: ...
 
     @property
-    def energy(self) -> u.Quantity:
+    def energy(self) -> Quantity:
         """
         Add fancy energy quantity
         """
-        return u.Quantity(self.energy_keV, u.keV, copy=None)
+        return Quantity(self.energy_keV, u.keV, copy=None)
 
 
 @runtime_checkable
@@ -157,11 +162,11 @@ class PhotonListWithEnergyInterface(PhotonListInterface, Protocol):
         return [e.energy_keV for e in self]
 
     @property
-    def energy(self) -> u.Quantity:
+    def energy(self) -> Quantity:
         """
         Add fancy energy quantity
         """
-        return u.Quantity(self.energy_keV, u.keV, copy=False)
+        return Quantity(self.energy_keV, u.keV, copy=False)
 
 
 @runtime_checkable
@@ -281,7 +286,7 @@ class PolarizedPhotonWithDirectionAndEnergyInSCFrameStereographicConventionInter
 
     @property
     def polarization_angle(self) -> PolarizationAngle:
-        return PolarizationAngle(u.Quantity(self.polarization_angle_rad_stereo, u.rad, copy = None), self.direction, 'stereographic')
+        return PolarizationAngle(Quantity(self.polarization_angle_rad_stereo, u.rad, copy = None), self.direction, 'stereographic')
 
 @runtime_checkable
 class PolarizedPhotonWithDirectionAndEnergyInSCFrameStereographicConventionInterface(PolarizedPhotonWithDirectionAndEnergyInSCFrameStereographicConventionInterfaceGen[float], PhotonWithDirectionAndEnergyInSCFrameInterface, PolarizedPhotonStereographicConventionInSCInterface, Protocol):...

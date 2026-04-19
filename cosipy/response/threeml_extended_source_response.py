@@ -120,10 +120,7 @@ class BinnedThreeMLExtendedSourceResponse(BinnedThreeMLSourceResponseInterface):
         # TODO: check coordsys from axis
         # TODO: Earth occ always true in this case
 
-        if self._data is None:
-            raise RuntimeError("Call set_source() first.")
-
-        if self._source is None:
+        if self._data is None or  self._source is None:
             raise RuntimeError("Call set_source() first.")
 
         # See this issue for the caveats of comparing models

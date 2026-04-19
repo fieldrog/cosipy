@@ -1,16 +1,12 @@
-from typing import Protocol, runtime_checkable, Dict, Any, Union
-import histpy
-import numpy as np
-
-import logging
+from typing import Protocol, runtime_checkable, Dict
 
 import astropy.units as u
 
-from astromodels import Parameter
-
-logger = logging.getLogger(__name__)
-
-from .expectation_interface import BinnedExpectationInterface, ExpectationDensityInterface, ExpectationInterface
+from .expectation_interface import (
+    BinnedExpectationInterface,
+    ExpectationDensityInterface,
+    ExpectationInterface
+)
 
 __all__ = [
            "BackgroundInterface",
@@ -25,13 +21,17 @@ class BackgroundInterface(ExpectationInterface, Protocol):
     def parameters(self) -> Dict[str, u.Quantity]:...
 
 @runtime_checkable
-class BinnedBackgroundInterface(BackgroundInterface, BinnedExpectationInterface, Protocol):
+class BinnedBackgroundInterface(BackgroundInterface,
+                                BinnedExpectationInterface,
+                                Protocol):
     """
     No new methods, just the inherited one
     """
 
 @runtime_checkable
-class BackgroundDensityInterface(BackgroundInterface, ExpectationDensityInterface, Protocol):
+class BackgroundDensityInterface(BackgroundInterface,
+                                 ExpectationDensityInterface,
+                                 Protocol):
     """
     No new methods, just the inherited one
     """

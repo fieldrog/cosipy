@@ -1,9 +1,8 @@
 import itertools
-from typing import Protocol, runtime_checkable, Generic, TypeVar, Iterable, ClassVar, Type, Iterator, _ProtocolMeta, \
-    Union
+from typing import Protocol, runtime_checkable, TypeVar, Iterable, Iterator, Union
 
 from astropy import units as u
-from astropy.coordinates import BaseCoordinateFrame, SkyCoord
+from astropy.coordinates import SkyCoord
 from scoords import SpacecraftFrame
 
 from cosipy.polarization import PolarizationConvention, PolarizationAngle, StereographicConvention
@@ -17,8 +16,9 @@ class PhotonInterface(Protocol):
     """
 
 def is_single_photon(photon : Union[PhotonInterface, 'PhotonListInterface']) -> bool:
-    # Since these protocols are runtime checkable, it's not enough to check the input is
-    # PhotonInterface, since the PhotonListInterface also returns True.
+    # Since these protocols are runtime checkable, it's not enough to
+    # check the input is PhotonInterface, since the
+    # PhotonListInterface also returns True.
     if isinstance(photon, PhotonListInterface):
         return False
     else:
@@ -47,19 +47,21 @@ class PhotonListInterface(Protocol):
 
     @classmethod
     def fromiter(cls, photons:Iterable[PhotonInterface], nphotons = None):
-        """
-        Turns an iterable of photon into a proper PhotonList
+        """Turns an iterable of photon into a proper PhotonList
 
         For convenience. Specific implementation can do better job.
 
-        It is not safe to call this method from an interface implementation that
-        does not explicitly overload fromiter(). Call it from an interface instead.
+        It is not safe to call this method from an interface
+        implementation that does not explicitly overload
+        fromiter(). Call it from an interface instead.
 
-        If you know it, specifying the length of the iterable can help optimize the code.
+        If you know it, specifying the length of the iterable can help
+        optimize the code.
+
         """
 
         if not getattr(cls, "_is_protocol", False):
-            raise RuntimeError("It is not safe to call fromiter() from an interface implementation that"                        
+            raise RuntimeError("It is not safe to call fromiter() from an interface implementation that"
                                "does not explicitly overload fromiter(). Call it from an interface instead.")
 
         class PhotonListIterableWrapper(cls):
@@ -97,7 +99,7 @@ class PhotonListInterface(Protocol):
         """
 
         if not getattr(cls, "_is_protocol", False):
-            raise RuntimeError("It is not safe to call from_photon() from an interface implementation that"                        
+            raise RuntimeError("It is not safe to call from_photon() from an interface implementation that"
                                "does not explicitly overload from_photon(). Call it from an interface instead.")
 
         if not isinstance(photon, cls.photon_type):

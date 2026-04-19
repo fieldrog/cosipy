@@ -26,8 +26,8 @@ class PhotonWithEnergyGen(Generic[T]):
     def energy_keV(self) -> T:
         return self._energy
 
-    class PhotonWithEnergy(PhotonWithEnergyGen[float],
-                           PhotonWithEnergyInterface):...
+class PhotonWithEnergy(PhotonWithEnergyGen[float],
+                       PhotonWithEnergyInterface):...
 
 class PhotonListWithEnergy(PhotonWithEnergyGen[np.ndarray[float]],
                            PhotonListWithEnergyInterface):

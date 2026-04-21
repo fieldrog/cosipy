@@ -61,22 +61,20 @@ class FreeNormBackground(BackgroundInterface):
 
         self._labels = tuple(self._distributions.keys())
 
-        # Normalize
-        # Unit: second
         self._livetime = sc_history.cumulative_livetime().to_value(u.s)
-        for label,dist in self._distributions.items():
-            dist_norm = np.sum(dist)
-            if copy:
-                self._distributions[label] = dist/dist_norm
-            else:
-                dist /= dist_norm
 
         # These will be densified anyway since _expectation is dense
         # And histpy doesn't yet handle this operation efficiently
         # See Histogram._inplace_operation_handle_sparse()
         # Do it once and for all
         for label, bkg in self._distributions.items():
-            self._distributions[label] = bkg.to_dense(copy=False)
+            self._distributions[label] = bkg.to_dense(copy=copy)
+
+        # Normalize
+        # Unit: second
+        for label,dist in self._distributions.items():
+            dist_norm = np.sum(dist)
+            dist /= dist_norm
 
         if self.ncomponents == 0:
             raise ValueError("You need to input at least one components")

@@ -1,4 +1,5 @@
 import logging
+import warnings
 import numpy as np
 from astropy.io import fits
 from astropy.time import Time
@@ -30,6 +31,14 @@ class PhaseAssigner:
         Returns:
             str: The path to the saved FITS file.
         """
+        warnings.warn(
+            "CAVEAT: The time coordinate system in the event FITS file is currently assumed "
+            "to be compatible with the pulsar timing model (e.g., Mission Elapsed Time). "
+            "The exact time definition (UTC, TT, etc.) and reference epoch for COSI data "
+            "and MEGAlib simulations are not yet fully standardized. Please manually ensure "
+            "your ephemeris and data time systems align to avoid phase shifts.",
+            UserWarning
+        )
         with fits.open(input_fits) as hdul:
             data = hdul[1].data
             header = hdul[1].header

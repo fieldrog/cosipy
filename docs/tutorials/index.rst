@@ -79,6 +79,9 @@ List of tutorials and contents, as a link to the corresponding Python notebook i
 14. Polarization (Stokes parameters method) `(ipynb) <https://github.com/cositools/cosipy/tree/main/docs/tutorials/polarization/Stokes_method.ipynb>`_
   - Estimating the polarization of a GRB using Stokes parameters
 
+14. Phase-resolved analysis `(ipynb) <https://github.com/cositools/cosipy/tree/feature/ephemeris-protocol-integration/docs/tutorials/phase_resolved_analysis/Ephemeris_Integration_Tutorial.ipynb>`_
+   - Folding event data and scaling mission exposure using pulsar timing models (ephemeris).
+
 .. warning::
    Under construction. Some of the explanations described above might be missing. However, the notebooks are fully functional. If you have a question not yet covered by the tutorials, please discuss `issue <https://github.com/cositools/cosipy/discussions>`_ so we can prioritize it.
     
@@ -97,3 +100,4 @@ List of tutorials and contents, as a link to the corresponding Python notebook i
    Line background estimation <background_estimation/line_background/line_background_estimation_example_notebook.ipynb>
    Polarization (ASAD method) <polarization/ASAD_method.ipynb>
    Transient background estimation <background_estimation/transient_background/Transient_background_example.ipynb>
+   Phase-resolved analysis <phase_resolved_analysis/Ephemeris_Integration_Tutorial.ipynb>

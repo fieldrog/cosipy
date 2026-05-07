@@ -100,7 +100,8 @@ List of tutorials and contents, as a link to the corresponding Python notebook i
    response/SpacecraftHistory.ipynb
    Detector response and signal expectation <response/DetectorResponse.ipynb>
    TS Map: localizing a GRB <ts_map/Parallel_TS_map_computation.ipynb>
-   Fitting the spectrum of the Crab <spectral_fits/continuum_fit/crab/SpectralFit_Crab.ipynb>
+   Fitting the spectrum of the Crab (binned) <spectral_fits/continuum_fit/crab/SpectralFit_Crab.ipynb>
+   Fitting the spectrum of a GRB (unbinned) <spectral_fits/continuum_fit/grb/example_grb_fit_normalizing_flows.ipynb>
    Extended source model fitting <spectral_fits/extended_source_fit/diffuse_511_spectral_fit.ipynb>
    Image deconvolution <image_deconvolution/511keV-Galactic-ImageDeconvolution.ipynb>
    Source injector <source_injector/Point_source_injector.ipynb>

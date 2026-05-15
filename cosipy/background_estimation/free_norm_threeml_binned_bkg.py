@@ -1,27 +1,35 @@
-import itertools
-from typing import Dict, Tuple, Union, Any, Type, Optional, Iterable
+from typing import Dict, Union, Type, Iterable
 
 import numpy as np
-from astromodels import Parameter
-from astropy.coordinates import SkyCoord, CartesianRepresentation, UnitSphericalRepresentation
-from astropy.time import Time
-from histpy import Histogram
-from histpy import Axes
 
+from astropy.coordinates import (
+    SkyCoord,
+    CartesianRepresentation,
+    UnitSphericalRepresentation
+)
+from astropy.time import Time
 from astropy import units as u
+
+from histpy import Histogram
+
 from scoords import SpacecraftFrame
 
 from cosipy import SpacecraftHistory
-from cosipy.data_io.EmCDSUnbinnedData import TimeTagEmCDSEventInSCFrame
-from cosipy.interfaces import BinnedBackgroundInterface, BinnedDataInterface, DataInterface, BackgroundDensityInterface, \
-    BackgroundInterface, EventInterface
-
-__all__ = ["FreeNormBinnedBackground"]
+from cosipy.interfaces import (
+    BinnedBackgroundInterface,
+    BackgroundDensityInterface,
+    BackgroundInterface,
+    EventInterface
+)
 
 from cosipy.interfaces.data_interface import TimeTagEmCDSEventDataInSCFrameInterface
 
 from cosipy.interfaces.event import TimeTagEmCDSEventInSCFrameInterface
 from cosipy.util.iterables import itertools_batched
+
+
+__all__ = ["FreeNormBinnedBackground"]
+
 
 class FreeNormBackground(BackgroundInterface):
     """
@@ -287,8 +295,10 @@ class FreeNormBackgroundInterpolatedDensityTimeTagEmCDS(FreeNormBackground, Back
 
     def expectation_density(self) -> Iterable[float]:
         """
-        Return the expected number of counts density from the start-th event
-        to the stop-th event. This equals the event probabiliy times the number of events
+        Return the expected number of counts density from the start-th
+        event to the stop-th event. This equals the event probabiliy
+        times the number of events
+
         """
 
         # Multiply each probability by the norm, and then sum

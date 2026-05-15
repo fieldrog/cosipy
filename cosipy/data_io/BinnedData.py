@@ -331,8 +331,8 @@ class BinnedData(UnBinnedData):
             self.load_binned_data_from_hdf5(binned_data)
 
         # Make healpix map with binned data slice:
-        h = self.binned_data.project('Em', 'Phi', 'PsiChi').slice[{'Em':Em, 'Phi':phi}].project('PsiChi')
-        m = HealpixMap(base = HealpixBase(npix = h.nbins), data = h.to_dense(copy=False).contents)
+        h = self.binned_data.slice[{'Em':Em, 'Phi':phi}].project('PsiChi').to_dense(copy=False)
+        m = HealpixMap(base = HealpixBase(npix = h.nbins), data = h.contents)
 
         # Plot standard view:
         plot,ax = m.plot('mollview')
